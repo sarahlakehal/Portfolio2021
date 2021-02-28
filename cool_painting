@@ -1,0 +1,42 @@
+PImage bridge;
+PImage brushStroke;
+PGraphics big;
+
+//takes in the dimensions of the imported image as parameters
+big = createGraphics(1000, 694, JAVA2D);
+big.beginDraw();
+
+//creating a background color first hand for a better appearance 
+  big.background(#FFFED9);
+  bridge = loadImage("hill.png");
+  
+  for (int i = 0; i < 30000; i++){
+  brushStroke = loadImage("brush strokes/stroke6.png");
+  frameRate(1000);
+
+  int strokeSize = 150 - i/20;
+  if (strokeSize < 20) strokeSize = 20;
+  brushStroke.resize(strokeSize, 0);
+ 
+  int randomX = (int) random(big.width);
+  int randomY = (int) random(big.height);
+  int pixelIndex = randomX + randomY*big.width;
+  
+//registers the pixels original color so the brush stroke comes out the correct color
+  color c = bridge.pixels[pixelIndex];
+  float bright = brightness(c);
+  
+//change tint for a cool look
+  color gradientMapColor = lerpColor(#ff0072, #ffba00, bright/255);
+  color newColor = lerpColor(c, gradientMapColor, 0.2);
+  big.tint(newColor, 100);
+  big.pushMatrix();
+  big.translate(randomX, randomY);
+  big.rotate(random(2*PI));
+  big.image(brushStroke, -brushStroke.width/2, -brushStroke.height/2);
+  big.popMatrix();
+  }
+  
+big.endDraw();
+big.save("TERMINER");
+println("saved");
